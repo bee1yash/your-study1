@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">YourStudy</string>
+    <string name="your_study">Your Study</string>
+    <string name="enter_text">Вхід</string>
+    <string name="register_link">Зареєструватись</string>
+    <string name="login_text">Увійти</string>
+    <string name="registration">Реєстрація</string>
+    <string name="registrate">Зареєструватись</string>
+    <string name="login_link">Увійти</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="title_home">Home</string>
+    <string name="title_schedule">Schedule</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="logout">Logout</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_search">Search</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_test">Test</string>
+    <string name="title_info">Info</string>
+    <string name="title_progress">Progress</string>
+    <string name="title_materials">Materials</string>
+</resources>

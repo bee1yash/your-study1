@@ -1,42 +1,46 @@
 package com.example.yourstudy;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.text.InputType;
-
-
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.ValueEventListener;
-import androidx.appcompat.app.AlertDialog;
-import android.content.DialogInterface;
-
 
 public class ProfileFragment extends Fragment {
 
     private FirebaseAuth auth;
     private FirebaseUser currentUser;
     private int userGroup = 0;
+    private TextView userEmailTextView;
+    private TextView userInfoTextView;
+    private TextView userGroupTextView;
 
-    public class User {
+    public static class User {
         private String email;
         private String lastName;
         private String firstName;
         private int group;
+
+        public User() {
+        }
 
         public User(String email, String lastName, String firstName, int group) {
             this.email = email;
@@ -92,14 +96,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        Button applyGroupButton = view.findViewById(R.id.apply_group_btn);
-        applyGroupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showGroupDialog();
-            }
-        });
-        Button logoutButton = view.findViewById(R.id.logout_btn);
+        userEmailTextView = view.findViewById(R.id.user_email);
+        userInfoTextView = view.findViewById(R.id.user_info);
+        userGroupTextView = view.findViewById(R.id.user_group);
+        TextView logoutButton = view.findViewById(R.id.logout_btn);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,16 +120,22 @@ public class ProfileFragment extends Fragment {
         currentUser = auth.getCurrentUser();
         if (currentUser != null) {
             String userEmail = currentUser.getEmail();
-            String[] parts = userEmail.split("@");
-            String[] userNameParts = parts[0].split("\\.");
-            String userFirstName = capitalizeFirstLetter(userNameParts[1]);
-            String userLastName = capitalizeFirstLetter(userNameParts[0]);
-
-            // Перевірка наявності даних в базі даних
             myRef.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (!dataSnapshot.exists()) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            User user = snapshot.getValue(User.class);
+                            if (user != null) {
+                                String firstName = user.getFirstName();
+                                String lastName = user.getLastName();
+                                int group = user.getGroup();
+                                userEmailTextView.setText(userEmail);
+                                userInfoTextView.setText(firstName + " " + lastName);
+                                userGroupTextView.setText("Group: " + group);
+                            }
+                        }
+                    } else {
                         showGroupDialog();
                     }
                 }
@@ -150,13 +156,13 @@ public class ProfileFragment extends Fragment {
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         builder.setView(input);
 
-     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String groupInput = input.getText().toString();
                 if (!groupInput.isEmpty()) {
                     userGroup = Integer.parseInt(groupInput);
-                    addUserToDatabase(); // Додати користувача до бази даних
+                    addUserToDatabase();
                 }
             }
         });
@@ -178,10 +184,13 @@ public class ProfileFragment extends Fragment {
             String userFirstName = capitalizeFirstLetter(userNameParts[1]);
             String userLastName = capitalizeFirstLetter(userNameParts[0]);
 
-            addUser(userEmail, userLastName, userFirstName, userGroup); // Додати користувача до бази даних
+            addUser(userEmail, userLastName, userFirstName, userGroup);
+
+            userEmailTextView.setText(userEmail);
+            userInfoTextView.setText(userFirstName + " " + userLastName);
+            userGroupTextView.setText("Group: " + userGroup);
         }
     }
-
 
     private String capitalizeFirstLetter(String word) {
         return word.substring(0, 1).toUpperCase() + word.substring(1);

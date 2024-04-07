@@ -56,7 +56,7 @@
         android:id="@+id/email"
         android:layout_width="203dp"
         android:layout_height="41dp"
-        android:layout_marginStart="96dp"
+        android:layout_marginStart="104dp"
         android:layout_marginTop="332dp"
         android:layout_marginBottom="382dp"
         android:hint="Email"

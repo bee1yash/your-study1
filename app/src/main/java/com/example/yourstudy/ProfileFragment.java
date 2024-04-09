@@ -2,27 +2,34 @@ package com.example.yourstudy;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.storage.UploadTask;
 
 public class ProfileFragment extends Fragment {
 
@@ -32,21 +39,39 @@ public class ProfileFragment extends Fragment {
     private TextView userEmailTextView;
     private TextView userInfoTextView;
     private TextView userGroupTextView;
+    private DatabaseReference userRef;
+    private ImageView profileImageView;
+
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri imageUri;
+    private Uri profileImageUri;
+
+    private StorageReference storageRef;
 
     public static class User {
         private String email;
         private String lastName;
         private String firstName;
         private int group;
+        private String photoURL;
 
         public User() {
         }
 
-        public User(String email, String lastName, String firstName, int group) {
+        public User(String email, String lastName, String firstName, int group, String photoURL) {
             this.email = email;
             this.lastName = lastName;
             this.firstName = firstName;
             this.group = group;
+            this.photoURL = photoURL;
+        }
+
+        public String getPhotoURL() {
+            return photoURL;
+        }
+
+        public void setPhotoURL(String photoURL) {
+            this.photoURL = photoURL;
         }
 
         public String getEmail() {
@@ -82,17 +107,6 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance("https://your-study-a761b-default-rtdb.europe-west1.firebasedatabase.app/");
-    DatabaseReference myRef = database.getReference("Users");
-
-    private void addUser(String email, String lastName, String firstName, int group) {
-        User user = new User(email, lastName, firstName, group);
-        String userId = myRef.push().getKey();
-
-        myRef.child(userId).setValue(user);
-    }
-
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -110,42 +124,55 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        return view;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         auth = FirebaseAuth.getInstance();
         currentUser = auth.getCurrentUser();
         if (currentUser != null) {
-            String userEmail = currentUser.getEmail();
-            myRef.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            User user = snapshot.getValue(User.class);
-                            if (user != null) {
-                                String firstName = user.getFirstName();
-                                String lastName = user.getLastName();
-                                int group = user.getGroup();
-                                userEmailTextView.setText(userEmail);
-                                userInfoTextView.setText(firstName + " " + lastName);
-                                userGroupTextView.setText("Group: " + group);
-                            }
-                        }
-                    } else {
-                        showGroupDialog();
-                    }
-                }
+            userRef = FirebaseDatabase.getInstance("https://your-study-a761b-default-rtdb.europe-west1.firebasedatabase.app/")
+                    .getReference("Users").child(currentUser.getUid());
+            storageRef = FirebaseStorage.getInstance().getReference().child("images/" + currentUser.getUid());
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
+            loadUserData();
         }
+
+        profileImageView = view.findViewById(R.id.profile_image);
+        profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser();
+            }
+        });
+
+        return view;
+    }
+
+    private void loadUserData() {
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user != null) {
+                        userEmailTextView.setText(user.getEmail());
+                        userInfoTextView.setText(user.getFirstName() + " " + user.getLastName());
+                        userGroupTextView.setText("Group: " + user.getGroup());
+
+                        String photoUrl = user.getPhotoURL();
+                        if (photoUrl != null && !photoUrl.isEmpty()) {
+                            Glide.with(requireContext())
+                                    .load(photoUrl)
+                                    .placeholder(R.drawable.baseline_person_24)
+                                    .into(profileImageView);
+                        }
+                    }
+                } else {
+                    showGroupDialog();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 
     private void showGroupDialog() {
@@ -184,7 +211,10 @@ public class ProfileFragment extends Fragment {
             String userFirstName = capitalizeFirstLetter(userNameParts[1]);
             String userLastName = capitalizeFirstLetter(userNameParts[0]);
 
-            addUser(userEmail, userLastName, userFirstName, userGroup);
+            String photoUrl = "";
+
+            User user = new User(userEmail, userLastName, userFirstName, userGroup, photoUrl);
+            userRef.setValue(user);
 
             userEmailTextView.setText(userEmail);
             userInfoTextView.setText(userFirstName + " " + userLastName);
@@ -195,4 +225,54 @@ public class ProfileFragment extends Fragment {
     private String capitalizeFirstLetter(String word) {
         return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
+            profileImageUri = data.getData();
+            profileImageView.setImageURI(profileImageUri);
+            uploadFile();
+        }
+    }
+    private void uploadFile() {
+        if (profileImageUri != null) {
+            storageRef.putFile(profileImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String photoUrl = uri.toString();
+                                    userRef.child("photoURL").setValue(photoUrl)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                }
+                                            });
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                        }
+                    });
+        }
+    }
+
 }

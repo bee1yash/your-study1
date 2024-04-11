@@ -18,18 +18,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.FirebaseDatabase;
+import com.theartofdev.edmodo.cropper.CropImageView;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+
+import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
 
@@ -120,7 +121,7 @@ public class ProfileFragment extends Fragment {
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(getActivity(), Login.class);
                 startActivity(intent);
-                getActivity().finish();
+                requireActivity().finish();
             }
         });
 
@@ -138,7 +139,9 @@ public class ProfileFragment extends Fragment {
         profileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFileChooser();
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .start(requireContext(), ProfileFragment.this);
             }
         });
 
@@ -226,53 +229,37 @@ public class ProfileFragment extends Fragment {
         return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
 
-    private void openFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
-            profileImageUri = data.getData();
-            profileImageView.setImageURI(profileImageUri);
-            uploadFile();
-        }
-    }
-    private void uploadFile() {
-        if (profileImageUri != null) {
-            storageRef.putFile(profileImageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    String photoUrl = uri.toString();
-                                    userRef.child("photoURL").setValue(photoUrl)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                }
-                                            });
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                        }
-                    });
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == requireActivity().RESULT_OK) {
+                profileImageUri = result.getUri();
+                profileImageView.setImageURI(profileImageUri);
+                uploadFile();
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
         }
     }
 
+    private void uploadFile() {
+        if (profileImageUri != null) {
+            storageRef.putFile(profileImageUri)
+                    .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String photoUrl = uri.toString();
+                        userRef.child("photoURL").setValue(photoUrl)
+                                .addOnSuccessListener(aVoid -> {
+                                    // Photo URL successfully saved
+                                })
+                                .addOnFailureListener(e -> {
+                                    // Failed to save photo URL
+                                });
+                    }))
+                    .addOnFailureListener(e -> {
+                        // Failed to upload file
+                    });
+        }
+    }
 }

@@ -19,4 +19,5 @@
     <string name="title_info">Info</string>
     <string name="title_progress">Progress</string>
     <string name="title_materials">Materials</string>
+    <string name="user_profile_image">User Profile Image</string>
 </resources>

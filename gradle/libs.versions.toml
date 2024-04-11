@@ -1,5 +1,6 @@
 [versions]
 agp = "8.3.1"
+androidImageCropper = "2.8.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
@@ -13,6 +14,7 @@ firebaseDatabase = "20.3.1"
 firebaseStorage = "20.3.0"
 
 [libraries]
+android-image-cropper = { module = "com.theartofdev.edmodo:android-image-cropper", version.ref = "androidImageCropper" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

@@ -30,7 +30,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.theartofdev.edmodo.cropper.CropImage;
 
-import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
 
@@ -43,7 +42,6 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference userRef;
     private ImageView profileImageView;
 
-    private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri;
     private Uri profileImageUri;
 
@@ -251,14 +249,11 @@ public class ProfileFragment extends Fragment {
                         String photoUrl = uri.toString();
                         userRef.child("photoURL").setValue(photoUrl)
                                 .addOnSuccessListener(aVoid -> {
-                                    // Photo URL successfully saved
                                 })
                                 .addOnFailureListener(e -> {
-                                    // Failed to save photo URL
                                 });
                     }))
                     .addOnFailureListener(e -> {
-                        // Failed to upload file
                     });
         }
     }

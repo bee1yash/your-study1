@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.schedule) {
                 replaceFragment(new HomeFragment());
-//            } else if (item.getItemId() == R.id.progress) {
-//                replaceFragment(new ScheduleFragment());
+            } else if (item.getItemId() == R.id.progress) {
+                replaceFragment(new ScheduleFragment());
             } else if (item.getItemId() == R.id.profile) {
                 replaceFragment(new ProfileFragment());
             } else if (item.getItemId() == R.id.materials) {

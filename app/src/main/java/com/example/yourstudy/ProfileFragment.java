@@ -1,5 +1,6 @@
 package com.example.yourstudy;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -42,7 +43,6 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference userRef;
     private ImageView profileImageView;
 
-    private Uri imageUri;
     private Uri profileImageUri;
 
     private StorageReference storageRef;
@@ -69,41 +69,26 @@ public class ProfileFragment extends Fragment {
             return photoURL;
         }
 
-        public void setPhotoURL(String photoURL) {
-            this.photoURL = photoURL;
-        }
 
         public String getEmail() {
             return email;
         }
 
-        public void setEmail(String email) {
-            this.email = email;
-        }
 
         public String getLastName() {
             return lastName;
         }
 
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
 
         public String getFirstName() {
             return firstName;
         }
 
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
 
         public int getGroup() {
             return group;
         }
 
-        public void setGroup(int group) {
-            this.group = group;
-        }
     }
 
     @Override
@@ -142,7 +127,6 @@ public class ProfileFragment extends Fragment {
                         .start(requireContext(), ProfileFragment.this);
             }
         });
-
         return view;
     }
 
@@ -179,11 +163,9 @@ public class ProfileFragment extends Fragment {
     private void showGroupDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Enter Your Group");
-
         final EditText input = new EditText(requireContext());
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         builder.setView(input);
-
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -200,10 +182,10 @@ public class ProfileFragment extends Fragment {
                 dialog.cancel();
             }
         });
-
         builder.show();
     }
 
+    @SuppressLint("SetTextI18n")
     private void addUserToDatabase() {
         if (currentUser != null) {
             String userEmail = currentUser.getEmail();
@@ -211,12 +193,9 @@ public class ProfileFragment extends Fragment {
             String[] userNameParts = parts[0].split("\\.");
             String userFirstName = capitalizeFirstLetter(userNameParts[1]);
             String userLastName = capitalizeFirstLetter(userNameParts[0]);
-
             String photoUrl = "";
-
             User user = new User(userEmail, userLastName, userFirstName, userGroup, photoUrl);
             userRef.setValue(user);
-
             userEmailTextView.setText(userEmail);
             userInfoTextView.setText(userFirstName + " " + userLastName);
             userGroupTextView.setText("Group: " + userGroup);

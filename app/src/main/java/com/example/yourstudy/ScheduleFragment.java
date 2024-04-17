@@ -14,19 +14,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.yourstudy.databinding.FragmentScheduleBinding;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.IOException;
 
@@ -34,41 +33,34 @@ public class ScheduleFragment extends Fragment {
     private FirebaseAuth auth;
     private FirebaseUser currentUser;
     public static class User {
-        private String email;
-        private String lastName;
-        private String firstName;
         private int group;
-        private String photoURL;
 
         public User() {
         }
 
-        public User(String email, String lastName, String firstName, int group, String photoURL) {
-            this.email = email;
-            this.lastName = lastName;
-            this.firstName = firstName;
+        public User(int group) {
             this.group = group;
-            this.photoURL = photoURL;
         }
-
 
         public int getGroup() {
             return group;
         }
 
-        public void setGroup(int group) {
-            this.group = group;
-        }
     }
+
     ImageView photoSchedule;
+    ImageView photoModule;
     FragmentScheduleBinding binding;
     StorageReference stoRef;
+    StorageReference moduleStoRef;
     File localfile;
+    File moduleLocalFile;
     DatabaseReference userRef;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
         photoSchedule = view.findViewById(R.id.photo_schedule);
+        photoModule = view.findViewById(R.id.photo_module);
         binding = FragmentScheduleBinding.inflate(inflater, container, false);
         stoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com").getReference().child("Schedule/3Group.jpg");
         auth = FirebaseAuth.getInstance();
@@ -80,17 +72,20 @@ public class ScheduleFragment extends Fragment {
         photoSchedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (localfile != null) {
-                    Intent intent = new Intent(getActivity(), FullScreenImageActivity.class);
-                    intent.putExtra("image_path", localfile.getAbsolutePath());
-                    startActivity(intent);
-                } else {
-                }
+                openFullScreenImage(localfile.getAbsolutePath());
+            }
+        });
+
+        photoModule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFullScreenImage(moduleLocalFile.getAbsolutePath());
             }
         });
 
         return view;
     }
+
 
     private void loadUserData() {
         userRef.addValueEventListener(new ValueEventListener() {
@@ -101,10 +96,32 @@ public class ScheduleFragment extends Fragment {
                     if (user != null) {
                         int group = user.getGroup();
                         switch (group) {
+                            case 1:
+                                stoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
+                                        .getReference().child("Schedule/1Group/1Schedule.jpg");
+                                loadScheduleImage();
+
+                                moduleStoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
+                                        .getReference().child("Schedule/1Group/3Module.jpg");
+                                loadModuleImage();
+                                break;
+                            case 2:
+                                stoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
+                                        .getReference().child("Schedule/2Group/2Schedule.jpg");
+                                loadScheduleImage();
+
+                                moduleStoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
+                                        .getReference().child("Schedule/3Group/3Module.jpg");
+                                loadModuleImage();
+                                break;
                             case 3:
                                 stoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
                                         .getReference().child("Schedule/3Group/3Schedule.jpg");
                                 loadScheduleImage();
+
+                                moduleStoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
+                                        .getReference().child("Schedule/3Group/3Module.jpg");
+                                loadModuleImage();
                                 break;
                             case 4:
                                 stoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
@@ -113,7 +130,6 @@ public class ScheduleFragment extends Fragment {
                                 break;
                             default:
                                 break;
-
                         }
                     }
                 }
@@ -121,7 +137,6 @@ public class ScheduleFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Обробка помилок бази даних
             }
         });
     }
@@ -144,5 +159,28 @@ public class ScheduleFragment extends Fragment {
             e.printStackTrace();
         }
     }
-}
 
+    private void loadModuleImage() {
+        try {
+            moduleLocalFile = File.createTempFile("module_tempfile", ".jpg");
+            moduleStoRef.getFile(moduleLocalFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(moduleLocalFile.getAbsolutePath());
+                    photoModule.setImageBitmap(bitmap);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void openFullScreenImage(String imagePath) {
+        Intent intent = new Intent(getActivity(), FullScreenImageActivity.class);
+        intent.putExtra("image_path", imagePath);
+        startActivity(intent);
+    }
+}

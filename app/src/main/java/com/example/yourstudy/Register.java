@@ -81,7 +81,7 @@ public class Register extends AppCompatActivity {
 
                                     Toast.makeText(Register.this, "Акаунт створено!", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(Register.this, "Authentication failed.",
+                                    Toast.makeText(Register.this, "Не вдалось зареєструватись.",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }

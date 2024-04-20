@@ -19,13 +19,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class Login extends AppCompatActivity {
+public class RegisterAdmin extends AppCompatActivity {
+
     TextInputEditText editTextEmail, editTextPassword;
-    ImageButton buttonLogin;
+    ImageButton buttonReg;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
-    TextView RegNow;
-    TextView AdminPage;
+    TextView LogNowAdmin;
 
     @Override
     public void onStart() {
@@ -37,27 +37,17 @@ public class Login extends AppCompatActivity {
             finish();
         }
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register_admin);
         mAuth = FirebaseAuth.getInstance();
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
-        buttonLogin = findViewById(R.id.log_btn);
+        buttonReg = findViewById(R.id.reg_btn);
         progressBar = findViewById(R.id.progress_bar);
-        RegNow = findViewById(R.id.regNow);
-        AdminPage = findViewById(R.id.admin_page);
-        RegNow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Register.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        AdminPage.setOnClickListener(new View.OnClickListener() {
+        LogNowAdmin = findViewById(R.id.loginNowAdmin);
+        LogNowAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LoginAdmin.class);
@@ -65,8 +55,7 @@ public class Login extends AppCompatActivity {
                 finish();
             }
         });
-
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
+        buttonReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
@@ -74,28 +63,30 @@ public class Login extends AppCompatActivity {
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextPassword.getText());
 
-                if(TextUtils.isEmpty(email)){
-                    Toast.makeText(Login.this,"Уведіть пошту", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(email)) {
+                    Toast.makeText(RegisterAdmin.this, "Уведіть пошту", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(TextUtils.isEmpty(password)){
-                    Toast.makeText(Login.this,"Уведіть пароль", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(password)) {
+                    Toast.makeText(RegisterAdmin.this, "Уведіть пароль", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                mAuth.signInWithEmailAndPassword(email, password)
+
+                if (!email.toLowerCase().contains("uzhnu.edu.ua") || email.toLowerCase().contains("student")) {
+                    Toast.makeText(RegisterAdmin.this, "Тільки викладачі можуть тут зареєструватись.", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    return;
+                }
+
+                mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(getApplicationContext(),"Вхід виконано", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    Toast.makeText(RegisterAdmin.this, "Акаунт створено!", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(Login.this, "Не вдалось увійти.",
-                                            Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegisterAdmin.this, "Не вдалось зареєструватись.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

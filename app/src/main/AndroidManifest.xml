@@ -31,6 +31,14 @@
 
         </activity>
         <activity
+            android:name=".LoginAdmin"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".RegisterAdmin"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".Register"
             android:exported="false"
             android:screenOrientation="portrait"/>

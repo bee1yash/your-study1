@@ -19,13 +19,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class Login extends AppCompatActivity {
+public class LoginAdmin extends AppCompatActivity {
     TextInputEditText editTextEmail, editTextPassword;
     ImageButton buttonLogin;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
-    TextView RegNow;
-    TextView AdminPage;
+    TextView RegNowAdmin;
 
     @Override
     public void onStart() {
@@ -41,26 +40,17 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login_admin);
         mAuth = FirebaseAuth.getInstance();
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         buttonLogin = findViewById(R.id.log_btn);
         progressBar = findViewById(R.id.progress_bar);
-        RegNow = findViewById(R.id.regNow);
-        AdminPage = findViewById(R.id.admin_page);
-        RegNow.setOnClickListener(new View.OnClickListener() {
+        RegNowAdmin = findViewById(R.id.regNowAdmin);
+        RegNowAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Register.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        AdminPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoginAdmin.class);
+                Intent intent = new Intent(getApplicationContext(), RegisterAdmin.class);
                 startActivity(intent);
                 finish();
             }
@@ -74,14 +64,20 @@ public class Login extends AppCompatActivity {
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextPassword.getText());
 
-                if(TextUtils.isEmpty(email)){
-                    Toast.makeText(Login.this,"Уведіть пошту", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(email)) {
+                    Toast.makeText(LoginAdmin.this, "Уведіть пошту", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(TextUtils.isEmpty(password)){
-                    Toast.makeText(Login.this,"Уведіть пароль", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(password)) {
+                    Toast.makeText(LoginAdmin.this, "Уведіть пароль", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (!email.toLowerCase().contains("uzhnu.edu.ua") || email.toLowerCase().contains("student")) {
+                    Toast.makeText(LoginAdmin.this, "Тільки викладачі можуть тут увійти.", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    return;
+                }
+
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -94,8 +90,7 @@ public class Login extends AppCompatActivity {
                                     finish();
                                     FirebaseUser user = mAuth.getCurrentUser();
                                 } else {
-                                    Toast.makeText(Login.this, "Не вдалось увійти.",
-                                            Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginAdmin.this, "Не вдалось увійти.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

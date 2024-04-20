@@ -16,11 +16,13 @@ public class FullScreenImageActivity extends Activity {
 
     private ScaleGestureDetector scaleGestureDetector;
     private float mScaleFactor = 1.0f;
+    private float mInitialScaleFactor = 1.0f;
     private ImageView fullScreenImageView;
     private float mLastTouchX;
     private float mLastTouchY;
     private int mActivePointerId;
-    private static final float TOUCH_SCALE_FACTOR = 0.2f;
+    private static final float MAX_SCALE_FACTOR = 5.0f;
+    private static final float TOUCH_SCALE_FACTOR = 0.7f;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -36,7 +38,14 @@ public class FullScreenImageActivity extends Activity {
 
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        fullScreenImageView.setOnTouchListener(new View.OnTouchListener() {
+        fullScreenImageView.post(new Runnable() {
+            @Override
+            public void run() {
+                mInitialScaleFactor = fullScreenImageView.getScaleX();
+            }
+        });
+
+        findViewById(android.R.id.content).setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -99,10 +108,19 @@ public class FullScreenImageActivity extends Activity {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             float scaleFactor = detector.getScaleFactor();
-            mScaleFactor *= scaleFactor;
+            float newScaleFactor = mScaleFactor * scaleFactor;
+            if (newScaleFactor < mInitialScaleFactor) {
+                scaleFactor = mInitialScaleFactor / mScaleFactor;
+                mScaleFactor = mInitialScaleFactor;
+            } else if (newScaleFactor > MAX_SCALE_FACTOR) {
+                scaleFactor = MAX_SCALE_FACTOR / mScaleFactor;
+                mScaleFactor = MAX_SCALE_FACTOR;
+            } else {
+                mScaleFactor = newScaleFactor;
+            }
             fullScreenImageView.setScaleX(mScaleFactor);
             fullScreenImageView.setScaleY(mScaleFactor);
             return true;
         }
     }
-}
+    }

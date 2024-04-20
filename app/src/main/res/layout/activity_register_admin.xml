@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login">
+    tools:context=".Register">
+
 
     <TextView
         android:id="@+id/myTextView"
@@ -23,12 +24,12 @@
 
     <TextView
         android:id="@+id/enter_title"
-        android:layout_width="122dp"
-        android:layout_height="39dp"
+        android:layout_width="148dp"
+        android:layout_height="46dp"
         android:layout_marginTop="107dp"
         android:fontFamily="sans-serif"
         android:gravity="center"
-        android:text="@string/enter_text"
+        android:text="@string/registration"
         android:textAlignment="center"
         android:textColor="#3F5DFF"
         android:textSize="24sp"
@@ -53,15 +54,17 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/email"
-        android:layout_width="196dp"
-        android:layout_height="46dp"
+        android:layout_width="203dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="332dp"
+        android:layout_marginBottom="382dp"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/regNow"
+        app:layout_constraintBottom_toTopOf="@+id/loginNowAdmin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.477" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/imageView1"
@@ -75,44 +78,46 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/password"
-        android:layout_width="196dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="380dp"
+        android:layout_width="203dp"
+        android:layout_height="41dp"
         android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/regNow"
+        app:layout_constraintBottom_toTopOf="@+id/reg_btn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
+        app:layout_constraintVertical_bias="0.965" />
+        <TextView
+            android:id="@+id/admin_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="Admin"
+            android:textColor="#3F5DFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/enter_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/myTextView"
+            app:layout_constraintVertical_bias="0.275" />
     <TextView
-        android:id="@+id/regNow"
+        android:id="@+id/loginNowAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="300dp"
-        android:fontFamily="sans-serif"
-        android:text="@string/registrate"
+        android:background="@drawable/transparent_button_background"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/login_link"
+        android:textAlignment="center"
         android:textColor="#3F5DFF"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView1" />
-
-    <TextView
-        android:id="@+id/admin_page"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:fontFamily="sans-serif"
-        android:text="Адмін сторінка"
-        android:textColor="#3F5DFF"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -123,7 +128,7 @@
     </ProgressBar>
 
     <ImageButton
-        android:id="@+id/log_btn"
+        android:id="@+id/reg_btn"
         android:layout_width="218dp"
         android:layout_height="42dp"
         android:layout_gravity="center_horizontal"
@@ -135,18 +140,21 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView1" />
 
     <TextView
-        android:id="@+id/log_text"
+        android:id="@+id/logintext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:fontFamily="sans-serif"
-        android:text="@string/login_text"
+        android:text="@string/registrate"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/log_btn"
-        app:layout_constraintEnd_toEndOf="@+id/log_btn"
-        app:layout_constraintStart_toStartOf="@+id/log_btn"
-        app:layout_constraintTop_toTopOf="@+id/log_btn" />
+        app:layout_constraintBottom_toBottomOf="@+id/reg_btn"
+        app:layout_constraintEnd_toEndOf="@+id/reg_btn"
+        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintStart_toStartOf="@+id/reg_btn"
+        app:layout_constraintTop_toTopOf="@+id/reg_btn"
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

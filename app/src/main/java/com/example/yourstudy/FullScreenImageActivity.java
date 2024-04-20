@@ -23,6 +23,10 @@ public class FullScreenImageActivity extends Activity {
     private int mActivePointerId;
     private static final float MAX_SCALE_FACTOR = 5.0f;
     private static final float TOUCH_SCALE_FACTOR = 0.7f;
+    public void onBackClicked(View view) {
+        onBackPressed();
+    }
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override

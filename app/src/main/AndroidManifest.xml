@@ -25,25 +25,29 @@
             android:theme="@style/Base.Theme.AppCompat"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".MainActivity"
+            android:name=".user.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
 
         </activity>
         <activity
-            android:name=".LoginAdmin"
+            android:name=".admin.LoginAdmin"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".RegisterAdmin"
+            android:name=".admin.RegisterAdmin"
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".Register"
+            android:name=".admin.MainActivityAdmin"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".user.Register"
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".Login"
+            android:name=".user.Login"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

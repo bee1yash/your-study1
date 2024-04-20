@@ -1,4 +1,4 @@
-package com.example.yourstudy;
+package com.example.yourstudy.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.yourstudy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -32,7 +33,7 @@ public class RegisterAdmin extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), MainActivityAdmin.class);
             startActivity(intent);
             finish();
         }
@@ -85,6 +86,9 @@ public class RegisterAdmin extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
                                     Toast.makeText(RegisterAdmin.this, "Акаунт створено!", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(), MainActivityAdmin.class);
+                                    startActivity(intent);
+                                    finish();
                                 } else {
                                     Toast.makeText(RegisterAdmin.this, "Не вдалось зареєструватись.", Toast.LENGTH_SHORT).show();
                                 }

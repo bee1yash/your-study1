@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login">
+    tools:context=".user.Login">
 
     <TextView
         android:id="@+id/myTextView"
@@ -77,15 +77,13 @@
         android:id="@+id/password"
         android:layout_width="196dp"
         android:layout_height="46dp"
-        android:layout_marginTop="380dp"
         android:hint="Password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/regNow"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.562" />
 
     <TextView
         android:id="@+id/regNow"
@@ -105,7 +103,8 @@
         android:id="@+id/admin_page"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="32dp"
         android:fontFamily="sans-serif"
         android:text="Адмін сторінка"
         android:textColor="#3F5DFF"

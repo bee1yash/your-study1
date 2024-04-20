@@ -1,4 +1,4 @@
-package com.example.yourstudy;
+package com.example.yourstudy.user;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -19,6 +19,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.yourstudy.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;

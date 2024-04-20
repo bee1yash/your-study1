@@ -1,4 +1,4 @@
-package com.example.yourstudy;
+package com.example.yourstudy.user;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.yourstudy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -19,12 +20,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginAdmin extends AppCompatActivity {
+public class Register extends AppCompatActivity {
+
     TextInputEditText editTextEmail, editTextPassword;
-    ImageButton buttonLogin;
+    ImageButton buttonReg;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
-    TextView RegNowAdmin;
+    TextView LogNow;
 
     @Override
     public void onStart() {
@@ -36,27 +38,25 @@ public class LoginAdmin extends AppCompatActivity {
             finish();
         }
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_admin);
+        setContentView(R.layout.activity_register);
         mAuth = FirebaseAuth.getInstance();
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
-        buttonLogin = findViewById(R.id.log_btn);
+        buttonReg = findViewById(R.id.reg_btn);
         progressBar = findViewById(R.id.progress_bar);
-        RegNowAdmin = findViewById(R.id.regNowAdmin);
-        RegNowAdmin.setOnClickListener(new View.OnClickListener() {
+        LogNow = findViewById(R.id.loginNow);
+        LogNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), RegisterAdmin.class);
+                Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
             }
         });
-
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
+        buttonReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
@@ -64,36 +64,36 @@ public class LoginAdmin extends AppCompatActivity {
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextPassword.getText());
 
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(LoginAdmin.this, "Уведіть пошту", Toast.LENGTH_SHORT).show();
+                if(TextUtils.isEmpty(email)){
+                    Toast.makeText(Register.this,"Уведіть пошту", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(LoginAdmin.this, "Уведіть пароль", Toast.LENGTH_SHORT).show();
+                if(TextUtils.isEmpty(password)){
+                    Toast.makeText(Register.this,"Уведіть пароль", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!email.toLowerCase().contains("uzhnu.edu.ua") || email.toLowerCase().contains("student")) {
-                    Toast.makeText(LoginAdmin.this, "Тільки викладачі можуть тут увійти.", Toast.LENGTH_SHORT).show();
+                if (!email.toLowerCase().contains("student")) {
+                    Toast.makeText(Register.this, "Ви можете використовувати тільки пошту студента.", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                     return;
                 }
-
-                mAuth.signInWithEmailAndPassword(email, password)
+                mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(getApplicationContext(),"Вхід виконано", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Register.this, "Акаунт створено!", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
                                     finish();
-                                    FirebaseUser user = mAuth.getCurrentUser();
                                 } else {
-                                    Toast.makeText(LoginAdmin.this, "Не вдалось увійти.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Register.this, "Не вдалось зареєструватись.",
+                                            Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
+
             }
         });
     }

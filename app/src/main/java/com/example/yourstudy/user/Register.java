@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.yourstudy.R;
+import com.example.yourstudy.admin.LoginAdmin;
+import com.example.yourstudy.admin.RegisterAdmin;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -27,6 +29,8 @@ public class Register extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView LogNow;
+
+    TextView AdminPageReg;
 
     @Override
     public void onStart() {
@@ -48,10 +52,19 @@ public class Register extends AppCompatActivity {
         buttonReg = findViewById(R.id.reg_btn);
         progressBar = findViewById(R.id.progress_bar);
         LogNow = findViewById(R.id.loginNow);
+        AdminPageReg = findViewById(R.id.admin_page_reg);
         LogNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Login.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        AdminPageReg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), RegisterAdmin.class);
                 startActivity(intent);
                 finish();
             }

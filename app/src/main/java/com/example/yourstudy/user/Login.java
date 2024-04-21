@@ -28,7 +28,7 @@ public class Login extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView RegNow;
-    TextView AdminPage;
+    TextView AdminPageLog;
 
     @Override
     public void onStart() {
@@ -51,7 +51,7 @@ public class Login extends AppCompatActivity {
         buttonLogin = findViewById(R.id.log_btn);
         progressBar = findViewById(R.id.progress_bar);
         RegNow = findViewById(R.id.regNow);
-        AdminPage = findViewById(R.id.admin_page);
+        AdminPageLog = findViewById(R.id.admin_page_log);
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             if (currentUser.getEmail().toLowerCase().contains("student")) {
@@ -72,7 +72,7 @@ public class Login extends AppCompatActivity {
                 finish();
             }
         });
-        AdminPage.setOnClickListener(new View.OnClickListener() {
+        AdminPageLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LoginAdmin.class);

@@ -163,7 +163,7 @@ public class ProfileFragment extends Fragment {
 
     private void showGroupDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Enter Your Group");
+        builder.setTitle("Enter your group");
         final EditText input = new EditText(requireContext());
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         builder.setView(input);

@@ -21,6 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
         android:id="@+id/enter_title"
         android:layout_width="122dp"
@@ -79,11 +80,11 @@
         android:layout_height="46dp"
         android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/regNow"
+        app:layout_constraintBottom_toTopOf="@+id/log_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.562" />
+        app:layout_constraintVertical_bias="0.970" />
 
     <TextView
         android:id="@+id/regNow"
@@ -100,13 +101,13 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView1" />
 
     <TextView
-        android:id="@+id/admin_page"
+        android:id="@+id/admin_page_log"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="sans-serif"
-        android:text="Адмін сторінка"
+        android:text="Admin page"
         android:textColor="#3F5DFF"
         android:textSize="20sp"
         android:textStyle="bold"

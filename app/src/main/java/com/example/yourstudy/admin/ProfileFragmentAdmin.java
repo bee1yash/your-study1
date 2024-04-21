@@ -2,6 +2,7 @@ package com.example.yourstudy.admin;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,9 +16,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.yourstudy.R;
 import com.example.yourstudy.admin.LoginAdmin;
-import com.example.yourstudy.user.ProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,7 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.theartofdev.edmodo.cropper.CropImage;
-
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 public class ProfileFragmentAdmin extends Fragment {
     public static class Admin {
@@ -65,13 +69,11 @@ public class ProfileFragmentAdmin extends Fragment {
         public String getFirstName() {
             return firstName;
         }
-
-
-
     }
+
     FirebaseAuth auth;
     FirebaseUser currentUser;
-    Uri profileImageUri;
+    Uri AdminprofileImageUri;
     StorageReference storageRef;
     DatabaseReference adminRef;
     TextView AdminEmailTextView;
@@ -79,12 +81,21 @@ public class ProfileFragmentAdmin extends Fragment {
     TextView logoutButton;
     ImageView AdminprofileImageView;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_admin, container, false);
-        TextView logoutButton = view.findViewById(R.id.logout_btn_admin);
+        logoutButton = view.findViewById(R.id.logout_btn_admin);
         AdminEmailTextView = view.findViewById(R.id.admin_email);
         AdminInfoTextView = view.findViewById(R.id.admin_info);
         AdminprofileImageView = view.findViewById(R.id.profile_image_admin);
+        AdminprofileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .start(requireContext(), ProfileFragmentAdmin.this);
+            }
+        });
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,45 +118,65 @@ public class ProfileFragmentAdmin extends Fragment {
 
         return view;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadAdminData();
+    }
+
     private void loadAdminData() {
-        adminRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    ProfileFragmentAdmin.Admin admin = dataSnapshot.getValue(ProfileFragmentAdmin.Admin.class);
-                    if (admin != null) {
-                        AdminEmailTextView.setText(admin.getEmail());
-                        AdminInfoTextView.setText(admin.getFirstName() + " " + admin.getLastName());
-                        String photoUrl = admin.getPhotoURL();
-                        if (photoUrl != null && !photoUrl.isEmpty()) {
-                            Glide.with(requireContext())
-                                    .load(photoUrl)
-                                    .placeholder(R.drawable.baseline_person_24)
-                                    .into(AdminprofileImageView);
+        if (isAdded()) {
+            adminRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (isAdded() && dataSnapshot.exists()) {
+                        Admin admin = dataSnapshot.getValue(Admin.class);
+                        if (admin != null) {
+                            AdminEmailTextView.setText(admin.getEmail());
+                            AdminInfoTextView.setText(admin.getFirstName() + " " + admin.getLastName());
+                            String photoUrl = admin.getPhotoURL();
+                            if (photoUrl != null && !photoUrl.isEmpty()) {
+                                Glide.with(requireContext())
+                                        .load(photoUrl)
+                                        .placeholder(R.drawable.baseline_person_24)
+                                        .into(AdminprofileImageView);
+                            }
                         }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }
     }
+
+
     @SuppressLint("SetTextI18n")
     private void addUserToDatabase() {
         if (currentUser != null) {
-            String adminEmail = currentUser.getEmail();
-            String[] parts = adminEmail.split("@");
-            String[] adminNameParts = parts[0].split("\\.");
-            String adminFirstName = capitalizeFirstLetter(adminNameParts[1]);
-            String adminLastName = capitalizeFirstLetter(adminNameParts[0]);
-            String photoUrl = "";
-            ProfileFragmentAdmin.Admin admin = new ProfileFragmentAdmin.Admin(adminEmail, adminLastName, adminFirstName,photoUrl);
-            adminRef.setValue(admin);
-            AdminEmailTextView.setText(adminEmail);
-            AdminInfoTextView.setText(adminFirstName + " " + adminLastName);
+            adminRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (!dataSnapshot.hasChild("photoURL")) {
+                        String adminEmail = currentUser.getEmail();
+                        String[] parts = adminEmail.split("@");
+                        String[] adminNameParts = parts[0].split("\\.");
+                        String adminFirstName = capitalizeFirstLetter(adminNameParts[1]);
+                        String adminLastName = capitalizeFirstLetter(adminNameParts[0]);
+                        String photoUrl = "";
+                        Admin admin = new Admin(adminEmail, adminLastName, adminFirstName, photoUrl);
+                        adminRef.setValue(admin);
+                        AdminEmailTextView.setText(adminEmail);
+                        AdminInfoTextView.setText(adminFirstName + " " + adminLastName);
+                    }
+                }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
         }
     }
 
@@ -159,8 +190,8 @@ public class ProfileFragmentAdmin extends Fragment {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == requireActivity().RESULT_OK) {
-                profileImageUri = result.getUri();
-                AdminprofileImageView.setImageURI(profileImageUri);
+                AdminprofileImageUri = result.getUri();
+                AdminprofileImageView.setImageURI(AdminprofileImageUri);
                 uploadFile();
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
@@ -169,8 +200,8 @@ public class ProfileFragmentAdmin extends Fragment {
     }
 
     private void uploadFile() {
-        if (profileImageUri != null) {
-            storageRef.putFile(profileImageUri)
+        if (AdminprofileImageUri != null) {
+            storageRef.putFile(AdminprofileImageUri)
                     .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                         String photoUrl = uri.toString();
                         adminRef.child("photoURL").setValue(photoUrl)

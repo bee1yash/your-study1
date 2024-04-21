@@ -27,7 +27,7 @@ public class LoginAdmin extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView RegNowAdmin;
-    TextView UserPage;
+    TextView UserPageLog;
 
     @Override
     public void onStart() {
@@ -50,7 +50,7 @@ public class LoginAdmin extends AppCompatActivity {
         buttonLogin = findViewById(R.id.log_btn);
         progressBar = findViewById(R.id.progress_bar);
         RegNowAdmin = findViewById(R.id.regNowAdmin);
-        UserPage = findViewById(R.id.user_page);
+        UserPageLog = findViewById(R.id.user_page_log);
         RegNowAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +59,7 @@ public class LoginAdmin extends AppCompatActivity {
                 finish();
             }
         });
-        UserPage.setOnClickListener(new View.OnClickListener() {
+        UserPageLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Login.class);

@@ -104,7 +104,7 @@ public class ScheduleFragment extends Fragment {
                                 loadScheduleImage();
 
                                 moduleStoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
-                                        .getReference().child("Schedule/1Group/Module.jpg");
+                                        .getReference().child("Schedule/1Group/1module.jpg");
                                 loadModuleImage();
                                 break;
                             case 2:
@@ -113,7 +113,7 @@ public class ScheduleFragment extends Fragment {
                                 loadScheduleImage();
 
                                 moduleStoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
-                                        .getReference().child("Schedule/2Group/Module.jpg");
+                                        .getReference().child("Schedule/2Group/2module.jpg");
                                 loadModuleImage();
                                 break;
                             case 3:
@@ -122,7 +122,7 @@ public class ScheduleFragment extends Fragment {
                                 loadScheduleImage();
 
                                 moduleStoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
-                                        .getReference().child("Schedule/3Group/Module.jpg");
+                                        .getReference().child("Schedule/3Group/3module.jpg");
                                 loadModuleImage();
                                 break;
                             case 4:
@@ -130,7 +130,7 @@ public class ScheduleFragment extends Fragment {
                                         .getReference().child("Schedule/4Group/4Schedule.jpg");
                                 loadScheduleImage();
                                 moduleStoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
-                                        .getReference().child("Schedule/4Group/Module.jpg");
+                                        .getReference().child("Schedule/4Group/4module.jpg");
                                 loadModuleImage();
                                 break;
                             default:

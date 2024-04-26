@@ -62,7 +62,7 @@
         android:id="@+id/logout_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Logout"
+        android:text="Вийти"
         android:textSize="20sp"
         android:textColor="#3F5DFF"
         android:textStyle="bold"

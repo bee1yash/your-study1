@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="84dp"
         android:padding="16dp"
-        android:text="Logout"
+        android:text="Вийти"
         android:textColor="#3F5DFF"
         android:textSize="20sp"
         android:textStyle="bold"

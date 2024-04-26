@@ -28,8 +28,8 @@ public class MainActivityAdmin extends AppCompatActivity {
                 replaceFragment(new ProfileFragmentAdmin());
 //            } else if (item.getItemId() == R.id.progress_admin) {
 //                replaceFragment(new ProgressFragmentAdmin());
-//            } else if (item.getItemId() == R.id.materials_admin) {
-//                replaceFragment(new MaterialsFragmentAdmin());
+            } else if (item.getItemId() == R.id.materials_admin) {
+                replaceFragment(new MaterialsFragmentAdmin());
             }
             return true;
         });

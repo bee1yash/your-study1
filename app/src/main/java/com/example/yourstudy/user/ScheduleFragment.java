@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -47,7 +48,6 @@ public class ScheduleFragment extends Fragment {
         public int getGroup() {
             return group;
         }
-
     }
 
     ImageView photoSchedule;
@@ -64,8 +64,9 @@ public class ScheduleFragment extends Fragment {
         photoSchedule = view.findViewById(R.id.photo_schedule);
         photoModule = view.findViewById(R.id.photo_module);
         binding = FragmentScheduleBinding.inflate(inflater, container, false);
-        stoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com").getReference().child("Schedule/3Group.jpg");
+        stoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com").getReference();
         auth = FirebaseAuth.getInstance();
+        moduleStoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com").getReference();
         currentUser = auth.getCurrentUser();
         userRef = FirebaseDatabase.getInstance("https://your-study-a761b-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Users").child(currentUser.getUid());
@@ -88,7 +89,6 @@ public class ScheduleFragment extends Fragment {
         return view;
     }
 
-
     private void loadUserData() {
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -99,38 +99,30 @@ public class ScheduleFragment extends Fragment {
                         int group = user.getGroup();
                         switch (group) {
                             case 1:
-                                stoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
-                                        .getReference().child("Schedule/1Group/1Schedule.jpg");
+                                stoRef = stoRef.child("Schedule/1Group/1Schedule.jpg");
                                 loadScheduleImage();
 
-                                moduleStoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
-                                        .getReference().child("Schedule/1Group/1module.jpg");
+                                moduleStoRef = moduleStoRef.child("Schedule/1Group/1Module.jpg");
                                 loadModuleImage();
                                 break;
                             case 2:
-                                stoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
-                                        .getReference().child("Schedule/2Group/2Schedule.jpg");
+                                stoRef = stoRef.child("Schedule/2Group/2Schedule.jpg");
                                 loadScheduleImage();
 
-                                moduleStoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
-                                        .getReference().child("Schedule/2Group/2module.jpg");
+                                moduleStoRef = moduleStoRef.child("Schedule/2Group/2Module.jpg");
                                 loadModuleImage();
                                 break;
                             case 3:
-                                stoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
-                                        .getReference().child("Schedule/3Group/3Schedule.jpg");
+                                stoRef = stoRef.child("Schedule/3Group/3Schedule.jpg");
                                 loadScheduleImage();
 
-                                moduleStoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
-                                        .getReference().child("Schedule/3Group/3module.jpg");
+                                moduleStoRef = moduleStoRef.child("Schedule/3Group/3Module.jpg");
                                 loadModuleImage();
                                 break;
                             case 4:
-                                stoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
-                                        .getReference().child("Schedule/4Group/4Schedule.jpg");
+                                stoRef = stoRef.child("Schedule/4Group/4Schedule.jpg");
                                 loadScheduleImage();
-                                moduleStoRef = FirebaseStorage.getInstance("gs://your-study-a761b.appspot.com")
-                                        .getReference().child("Schedule/4Group/4module.jpg");
+                                moduleStoRef = moduleStoRef.child("Schedule/4Group/4Module.jpg");
                                 loadModuleImage();
                                 break;
                             default:
@@ -183,6 +175,7 @@ public class ScheduleFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
     private void openFullScreenImage(String imagePath) {
         Intent intent = new Intent(getActivity(), FullScreenImageActivity.class);
         intent.putExtra("image_path", imagePath);

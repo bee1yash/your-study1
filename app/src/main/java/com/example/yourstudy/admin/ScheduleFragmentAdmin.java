@@ -31,17 +31,15 @@ public class ScheduleFragmentAdmin extends Fragment {
     private static final int REQUEST_CODE = 1;
     private int selectedGroup = 0;
 
-    ImageView photoSchedule;
-    ImageView photoModule;
+
     FragmentScheduleAdminBinding binding_admin;
     StorageReference stoRef;
+    Bitmap bitmapSchedule = null;
+    Bitmap bitmapModule = null;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_schedule_admin, container, false);
         binding_admin = FragmentScheduleAdminBinding.inflate(inflater, container, false);
-        photoSchedule = view.findViewById(R.id.photo_schedule);
-        photoModule = view.findViewById(R.id.photo_module);
-
         Button selectGroupButton = view.findViewById(R.id.select_group_button);
         selectGroupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,8 +50,7 @@ public class ScheduleFragmentAdmin extends Fragment {
                 builder.setItems(groups, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Set the selected group based on the user's selection
-                        selectedGroup = which + 1; // Groups are 1-indexed
+                        selectedGroup = which + 1;
                         Toast.makeText(getActivity(), "Selected Group: " + selectedGroup, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -108,19 +105,9 @@ public class ScheduleFragmentAdmin extends Fragment {
                         })
                         .addOnFailureListener(e -> Toast.makeText(getActivity(), "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
 
-                if (photoSchedule != null && photoModule != null) {
-                    if (selectedGroup != 0) {
-                        if (imageUri.getPath().contains("Schedule")) {
-                            photoSchedule.setImageBitmap(bitmap);
-                        } if (imageUri.getPath().contains("module")) {
-                            photoModule.setImageBitmap(bitmap);
-                        }
-                    } else {
-                        Toast.makeText(getActivity(), "Please select a group first", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+
+                } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }

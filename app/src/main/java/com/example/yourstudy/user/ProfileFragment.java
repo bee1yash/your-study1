@@ -140,7 +140,7 @@ public class ProfileFragment extends Fragment {
                     if (user != null) {
                         userEmailTextView.setText(user.getEmail());
                         userInfoTextView.setText(user.getFirstName() + " " + user.getLastName());
-                        userGroupTextView.setText("Group: " + user.getGroup());
+                        userGroupTextView.setText("Група: " + user.getGroup());
 
                         String photoUrl = user.getPhotoURL();
                         if (photoUrl != null && !photoUrl.isEmpty()) {
@@ -163,7 +163,7 @@ public class ProfileFragment extends Fragment {
 
     private void showGroupDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Enter your group");
+        builder.setTitle("Уведіть свою групу");
         final EditText input = new EditText(requireContext());
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         builder.setView(input);
@@ -177,7 +177,7 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Відміна", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

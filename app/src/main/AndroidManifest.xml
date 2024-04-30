@@ -30,6 +30,23 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity android:name=".pdf.RetrievePDFEnglish" />
+        <activity android:name=".pdf.RetrievePDFGraphics" />
+        <activity android:name=".pdf.RetrievePDFManagement" />
+        <activity android:name=".pdf.RetrievePDFOOP" />
+        <activity android:name=".pdf.RetrievePDFModern_Languages" />
+        <activity android:name=".pdf.RetrievePDFProbability_Theory" />
+        <activity android:name=".pdf.RetrievePDFProgramming_Technology" />
+
+        <activity android:name=".pdf.RetrievePDFEnglishAdmin" />
+        <activity android:name=".pdf.RetrievePDFGraphicsAdmin" />
+        <activity android:name=".pdf.RetrievePDFManagementAdmin" />
+        <activity android:name=".pdf.RetrievePDFOOPAdmin" />
+        <activity android:name=".pdf.RetrievePDFModern_LanguagesAdmin" />
+        <activity android:name=".pdf.RetrievePDFProbability_TheoryAdmin" />
+        <activity android:name=".pdf.RetrievePDFProgramming_TechnologyAdmin" />
+
+
         <activity
             android:name=".admin.LoginAdmin"
             android:screenOrientation="portrait">
@@ -57,5 +74,5 @@
             </intent-filter>
         </activity>
     </application>
+    </manifest>
 
-</manifest>

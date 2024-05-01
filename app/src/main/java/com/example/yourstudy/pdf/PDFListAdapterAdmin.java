@@ -16,11 +16,12 @@ import com.example.yourstudy.R;
 
 import java.util.List;
 
-public class PDFListAdapter extends ArrayAdapter<putPDF> {
+public class PDFListAdapterAdmin extends ArrayAdapter<putPDF> {
+
     private Context mContext;
     private List<putPDF> mPDFList;
 
-    public PDFListAdapter(Context context, List<putPDF> pdfList) {
+    public PDFListAdapterAdmin(Context context, List<putPDF> pdfList) {
         super(context, 0, pdfList);
         mContext = context;
         mPDFList = pdfList;
@@ -31,7 +32,7 @@ public class PDFListAdapter extends ArrayAdapter<putPDF> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if (listItem == null) {
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.retrieve_pdf, parent, false);
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.retrieve_pdf_admin, parent, false);
         }
 
         putPDF currentPDF = mPDFList.get(position);
@@ -45,7 +46,7 @@ public class PDFListAdapter extends ArrayAdapter<putPDF> {
                 String fileUrl = currentPDF.getUrl();
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.parse(fileUrl), "*/*");
-                mContext.startActivity(intent);
+                    mContext.startActivity(intent);
             }
         });
 

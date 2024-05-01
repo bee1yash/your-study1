@@ -8,11 +8,4 @@
     tools:context=".user.Register">
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Progress"
-        android:gravity="center"
-        android:textSize="30sp"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

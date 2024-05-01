@@ -34,9 +34,9 @@ public class RetrievePDFProbability_Theory extends AppCompatActivity {
     }
 
     private void retrievePDFFiles() {
-        DatabaseReference englishReference = databaseReference.child("Теорія ймовірності");
+        DatabaseReference probabilityReference = databaseReference.child("Теорія ймовірностей");
 
-        englishReference.addValueEventListener(new ValueEventListener() {
+        probabilityReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<putPDF> pdfList = new ArrayList<>();

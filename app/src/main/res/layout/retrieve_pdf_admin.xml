@@ -18,5 +18,14 @@
         android:layout_below="@id/text_file_name"
         android:padding="7dp" />
 
+    <ImageButton
+        android:id="@+id/btn_delete_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/transparent_button_background"
+        android:src="@drawable/delete_file_materials"
+        android:layout_below="@id/list_materials"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
 
 </RelativeLayout>

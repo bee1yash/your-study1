@@ -34,9 +34,9 @@ public class RetrievePDFProgramming_Technology extends AppCompatActivity {
     }
 
     private void retrievePDFFiles() {
-        DatabaseReference englishReference = databaseReference.child("Технологія програмування");
+        DatabaseReference programmingReference = databaseReference.child("Технологія програмування");
 
-        englishReference.addValueEventListener(new ValueEventListener() {
+        programmingReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<putPDF> pdfList = new ArrayList<>();

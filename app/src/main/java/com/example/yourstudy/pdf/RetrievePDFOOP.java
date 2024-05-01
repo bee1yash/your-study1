@@ -34,9 +34,9 @@ public class RetrievePDFOOP extends AppCompatActivity {
     }
 
     private void retrievePDFFiles() {
-        DatabaseReference englishReference = databaseReference.child("Об'єктно-орієнтоване програмування");
+        DatabaseReference OOPReference = databaseReference.child("Об'єктно-орієнтоване програмування");
 
-        englishReference.addValueEventListener(new ValueEventListener() {
+        OOPReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<putPDF> pdfList = new ArrayList<>();

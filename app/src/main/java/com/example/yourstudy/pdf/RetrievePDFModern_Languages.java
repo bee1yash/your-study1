@@ -34,9 +34,9 @@ public class RetrievePDFModern_Languages extends AppCompatActivity {
     }
 
     private void retrievePDFFiles() {
-        DatabaseReference englishReference = databaseReference.child("Сучасні мови програмування");
+        DatabaseReference modernLanguagesReference = databaseReference.child("Сучасні мови програмування");
 
-        englishReference.addValueEventListener(new ValueEventListener() {
+        modernLanguagesReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<putPDF> pdfList = new ArrayList<>();

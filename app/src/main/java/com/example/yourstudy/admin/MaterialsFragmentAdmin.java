@@ -236,7 +236,7 @@ public class MaterialsFragmentAdmin extends Fragment {
 
                             databaseReference.child(selectedSubject).child(Objects.requireNonNull(databaseReference.push().getKey())).setValue(putPDF);
 
-                            Toast.makeText(getActivity(), "File uploaded", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Файл завантажено", Toast.LENGTH_SHORT).show();
 
                             selectedSubject = null;
                         }

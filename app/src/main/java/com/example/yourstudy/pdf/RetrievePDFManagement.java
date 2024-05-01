@@ -34,9 +34,9 @@ public class RetrievePDFManagement extends AppCompatActivity {
     }
 
     private void retrievePDFFiles() {
-        DatabaseReference englishReference = databaseReference.child("Менеджмент");
+        DatabaseReference managementReference = databaseReference.child("Менеджмент");
 
-        englishReference.addValueEventListener(new ValueEventListener() {
+        managementReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<putPDF> pdfList = new ArrayList<>();

@@ -33,9 +33,9 @@ public class RetrievePDFGraphics extends AppCompatActivity {
     }
 
     private void retrievePDFFiles() {
-        DatabaseReference englishReference = databaseReference.child("Графічне та геометричне програмування");
+        DatabaseReference graphicsReference = databaseReference.child("Графічне та геометричне програмування");
 
-        englishReference.addValueEventListener(new ValueEventListener() {
+        graphicsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<putPDF> pdfList = new ArrayList<>();

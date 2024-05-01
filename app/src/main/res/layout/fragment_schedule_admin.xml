@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:gravity="center"
-        android:text="Адмін сторінка Schedule"
+        android:text="Розклад"
         android:textColor="#3F5DFF"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -29,46 +29,32 @@
         android:id="@+id/select_group_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="256dp"
+        android:layout_marginTop="248dp"
         android:background="@drawable/transparent_button_background"
-        android:src="@drawable/login_button"
-        android:text="Select Group"
+        android:src="@drawable/first_button_schedule"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/admin_schedule" />
 
-    <TextView
-        android:id="@+id/selectgroup_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Вибрати групу"
-        android:textColor="#FFFFFF"
-        android:textSize="15dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.437" />
-
-    <Button
+    <ImageButton
         android:id="@+id/upload_module_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:text="Upload Module"
+        android:background="@drawable/transparent_button_background"
+        android:src="@drawable/third_button_schedule"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/upload_schedule_button" />
 
-    <Button
+    <ImageButton
         android:id="@+id/upload_schedule_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Upload Schedule"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/transparent_button_background"
+        android:src="@drawable/second_button_schedule"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/select_group_button" />

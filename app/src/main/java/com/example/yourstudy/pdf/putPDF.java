@@ -1,5 +1,7 @@
 package com.example.yourstudy.pdf;
 
+import androidx.annotation.NonNull;
+
 public class putPDF {
     private String name;
     private String url;
@@ -15,6 +17,11 @@ public class putPDF {
     }
 
     public String getName() {
+        return name;
+    }
+    @NonNull
+    @Override
+    public String toString() {
         return name;
     }
 

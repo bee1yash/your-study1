@@ -43,25 +43,24 @@ public class ScheduleFragmentAdmin extends Fragment {
         View view = inflater.inflate(R.layout.fragment_schedule_admin, container, false);
         binding_admin = FragmentScheduleAdminBinding.inflate(inflater, container, false);
         ImageButton selectGroupButton = view.findViewById(R.id.select_group_button);
-        TextView selectGroup_text = view.findViewById(R.id.selectgroup_text);
         selectGroupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Select Group");
-                String[] groups = {"Group 1", "Group 2", "Group 3", "Group 4"};
+                builder.setTitle("Оберіть групу");
+                String[] groups = {"Група 1", "Група 2", "Група 3", "Група 4"};
                 builder.setItems(groups, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         selectedGroup = which + 1;
-                        Toast.makeText(getActivity(), "Selected Group: " + selectedGroup, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Обрана група: " + selectedGroup, Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.show();
             }
         });
 
-        Button uploadScheduleButton = view.findViewById(R.id.upload_schedule_button);
+        ImageButton uploadScheduleButton = view.findViewById(R.id.upload_schedule_button);
         uploadScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +68,7 @@ public class ScheduleFragmentAdmin extends Fragment {
             }
         });
 
-        Button uploadModuleButton = view.findViewById(R.id.upload_module_button);
+        ImageButton uploadModuleButton = view.findViewById(R.id.upload_module_button);
         uploadModuleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

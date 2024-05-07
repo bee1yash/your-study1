@@ -26,8 +26,8 @@ public class MainActivityAdmin extends AppCompatActivity {
                 replaceFragment(new ScheduleFragmentAdmin());
             } else if (item.getItemId() == R.id.profile_admin) {
                 replaceFragment(new ProfileFragmentAdmin());
-//            } else if (item.getItemId() == R.id.progress_admin) {
-//                replaceFragment(new ProgressFragmentAdmin());
+            } else if (item.getItemId() == R.id.progress_admin) {
+                replaceFragment(new ProgressFragmentAdmin());
             } else if (item.getItemId() == R.id.materials_admin) {
                 replaceFragment(new MaterialsFragmentAdmin());
             }

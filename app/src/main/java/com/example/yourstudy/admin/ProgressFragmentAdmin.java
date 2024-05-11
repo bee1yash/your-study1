@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.yourstudy.R;
@@ -25,6 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -65,6 +69,7 @@ public class ProgressFragmentAdmin extends Fragment {
     private EditText secondModuleGradeInput;
     private ImageButton addGradesButton;
     private TextView averageGradeTextView;
+    private TextView averageGradeTextView2;
     private Spinner subjectSpinner;
     private ArrayAdapter<String> subjectAdapter;
     private DatabaseReference databaseReference;
@@ -74,7 +79,8 @@ public class ProgressFragmentAdmin extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_progress_admin, container, false);
-
+        ArrayList<String> subjectsWithHint = new ArrayList<>(Arrays.asList(SUBJECTS));
+        subjectsWithHint.add(0, "Оберіть предмет");
         searchInput = view.findViewById(R.id.search_input);
         searchButton = view.findViewById(R.id.search_button);
         studentInfoTextView = view.findViewById(R.id.student_info_text_view);
@@ -82,9 +88,10 @@ public class ProgressFragmentAdmin extends Fragment {
         secondModuleGradeInput = view.findViewById(R.id.second_module_grade_input);
         addGradesButton = view.findViewById(R.id.add_grades_button);
         averageGradeTextView = view.findViewById(R.id.average_grade_text_view);
+        averageGradeTextView2 = view.findViewById(R.id.average_grade_text_view2);
         subjectSpinner = view.findViewById(R.id.subject_spinner);
 
-        subjectAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, SUBJECTS);
+        subjectAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, subjectsWithHint);
         subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         subjectSpinner.setAdapter(subjectAdapter);
 
@@ -93,21 +100,26 @@ public class ProgressFragmentAdmin extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String fullNameQuery = searchInput.getText().toString().trim();
+                String query = searchInput.getText().toString().trim();
 
-                if (fullNameQuery.isEmpty()) {
-                    Toast.makeText(getContext(), "Please enter both first name and last name", Toast.LENGTH_SHORT).show();
+                if (query.isEmpty()) {
+                    Toast.makeText(getContext(), "Поле порожнє", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                String[] parts = fullNameQuery.split(" ");
-                String firstNameQuery = parts[0];
-                String lastNameQuery = parts.length > 1 ? parts[1] : "";
+                Query searchQuery;
+                if (query.contains("@")) {
+                    searchQuery = databaseReference.orderByChild("email").equalTo(query);
+                } else {
+                    String[] parts = query.split(" ");
+                    String firstNameQuery = capitalizeFirstLetter(parts[0]);
+                    String lastNameQuery = parts.length > 1 ? capitalizeFirstLetter(parts[1]) : "";
 
-                Query searchQuery = databaseReference.orderByChild("firstName")
-                        .startAt(firstNameQuery)
-                        .endAt(firstNameQuery + "\uf8ff")
-                        .limitToFirst(1);
+                    searchQuery = databaseReference.orderByChild("firstName")
+                            .startAt(firstNameQuery)
+                            .endAt(firstNameQuery + "\uf8ff")
+                            .limitToFirst(1);
+                }
 
                 searchQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -115,16 +127,15 @@ public class ProgressFragmentAdmin extends Fragment {
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 User user = snapshot.getValue(User.class);
-                                if (user != null && user.getLastName().equals(lastNameQuery)) {
-                                    email = user.getEmail();
+                                if (user != null) {
                                     displayUserInfo(user);
                                     return;
                                 }
                             }
-                            Toast.makeText(getContext(), "Student not found", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Студента не знайдено", Toast.LENGTH_SHORT).show();
                             studentInfoTextView.setText("");
                         } else {
-                            Toast.makeText(getContext(), "Student not found", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Студента не знайдено", Toast.LENGTH_SHORT).show();
                             studentInfoTextView.setText("");
                         }
                     }
@@ -146,7 +157,7 @@ public class ProgressFragmentAdmin extends Fragment {
                 String selectedSubject = subjectSpinner.getSelectedItem().toString();
 
                 if (email == null || email.isEmpty()) {
-                    Toast.makeText(getContext(), "Please search for a student first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Спочатку знайдіть студента", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -155,20 +166,34 @@ public class ProgressFragmentAdmin extends Fragment {
                     int secondGrade = Integer.parseInt(secondModuleGrade);
 
                     if (firstGrade > 100 || secondGrade > 100) {
-                        Toast.makeText(getContext(), "Grades cannot be greater than 100", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Бал не може бути більший за 100", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     int averageGrade = (firstGrade + secondGrade) / 2;
 
+
                     String averageGradeString = String.valueOf(averageGrade);
 
-                    averageGradeTextView.setText("Average Grade: " + averageGradeString);
+                    averageGradeTextView2.setText(averageGradeString);
 
                     addGradesToDatabase(email, firstModuleGrade, secondModuleGrade, selectedSubject, averageGradeString);
                 } else {
-                    Toast.makeText(getContext(), "Please enter grades for both modules", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Уведіть бали за обидва модулі", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    ((TextView) view).setTextColor(ContextCompat.getColor(requireContext(), R.color.colorHint));
+                    ((TextView) view).setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
@@ -181,7 +206,7 @@ public class ProgressFragmentAdmin extends Fragment {
             String studentInfo = user.getFirstName() + " " + user.getLastName() + "\n" + user.getEmail();
             studentInfoTextView.setText(studentInfo);
         } else {
-            Toast.makeText(getContext(), "User data is null", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Дані студента порожні", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -199,7 +224,7 @@ public class ProgressFragmentAdmin extends Fragment {
                         snapshot.getRef().child(subject + "SecondModuleGrade").setValue(secondModuleGrade);
                         snapshot.getRef().child(subject + "AverageGrade").setValue(averageGrade);
                     }
-                    Toast.makeText(getContext(), "Grades updated successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Бали успішно оновлені", Toast.LENGTH_SHORT).show();
                 } else {
                     String userUid = UUID.randomUUID().toString();
                     DatabaseReference newGradeRef = gradesRef.child(userUid);
@@ -214,9 +239,9 @@ public class ProgressFragmentAdmin extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(getContext(), "Grades added successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Бали успішно оновлені", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(getContext(), "Failed to add grades", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Невдалось поставити бали", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -228,5 +253,9 @@ public class ProgressFragmentAdmin extends Fragment {
                 Toast.makeText(getContext(), "Database Error", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private String capitalizeFirstLetter(String input) {
+        if (input.isEmpty()) return input;
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
     }
 }

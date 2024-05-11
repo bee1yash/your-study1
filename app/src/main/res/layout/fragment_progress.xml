@@ -8,47 +8,13 @@
     tools:context=".user.Register">
 
     <RelativeLayout
-        android:id="@+id/relativeLayout1"
-        android:layout_width="140dp"
-        android:layout_height="160dp"
-        android:background="@drawable/rounded_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.099"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05">
-
-        <ImageButton
-            android:id="@+id/english_grade"
-            android:layout_width="83dp"
-            android:layout_height="83dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="35dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/transparent_button_background"
-            android:src="@drawable/english_book" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/english_grade"
-            android:textColor="#3F5DFF"
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"
-            android:layout_centerInParent="true"
-            android:text="Англійська мова" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/relativeLayout2"
         android:layout_width="140dp"
         android:layout_height="160dp"
         android:background="@drawable/rounded_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.797"
+        app:layout_constraintHorizontal_bias="0.878"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.05">
@@ -57,59 +23,26 @@
             android:id="@+id/graphics_grade"
             android:layout_width="115dp"
             android:layout_height="113dp"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center_vertical"
             android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="20dp"
             android:background="@drawable/transparent_button_background"
             android:scaleType="fitCenter"
             android:src="@drawable/unreal_engine"
             tools:layout_editor_absoluteX="234dp"
             tools:layout_editor_absoluteY="72dp">
+
         </ImageButton>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/graphics_grade"
-            android:textColor="#3F5DFF"
-            android:textStyle="bold"
             android:layout_centerInParent="true"
             android:layout_marginTop="-5dp"
-            android:text="Графіка" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/relativeLayout3"
-        android:layout_width="140dp"
-        android:layout_height="160dp"
-        android:background="@drawable/rounded_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.099"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/relativeLayout1"
-        app:layout_constraintVertical_bias="0.028">
-
-        <ImageButton
-            android:id="@+id/management_grades"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:layout_gravity="center_vertical"
-            android:layout_centerInParent="true"
-            android:background="@drawable/transparent_button_background"
-            android:scaleType="fitCenter"
-            android:src="@drawable/management"
-            tools:layout_editor_absoluteX="234dp"
-            tools:layout_editor_absoluteY="72dp">
-
-        </ImageButton>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/management_grades"
+            android:text="Графіка"
             android:textColor="#3F5DFF"
-            android:textStyle="bold"
-            android:layout_centerInParent="true"
-            android:text="Менеджмент" />
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -119,17 +52,17 @@
         android:background="@drawable/rounded_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.797"
+        app:layout_constraintHorizontal_bias="0.878"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/relativeLayout2"
-        app:layout_constraintVertical_bias="0.026">
+        app:layout_constraintVertical_bias="0.030">
 
         <ImageButton
             android:id="@+id/oop_grades"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:layout_gravity="center_vertical"
             android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
             android:background="@drawable/transparent_button_background"
             android:scaleType="fitCenter"
             android:src="@drawable/ruby"
@@ -137,14 +70,15 @@
             tools:layout_editor_absoluteY="72dp">
 
         </ImageButton>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/oop_grades"
-            android:textColor="#3F5DFF"
-            android:textStyle="bold"
             android:layout_centerInParent="true"
-            android:text="ООП" />
+            android:text="ООП"
+            android:textColor="#3F5DFF"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -154,17 +88,17 @@
         android:background="@drawable/rounded_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.099"
+        app:layout_constraintHorizontal_bias="0.129"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/relativeLayout1"
-        app:layout_constraintVertical_bias="0.361">
+        app:layout_constraintTop_toBottomOf="@id/relativeLayout3"
+        app:layout_constraintVertical_bias="0.035">
 
         <ImageButton
             android:id="@+id/modern_languages_grades"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:layout_gravity="center_vertical"
             android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
             android:background="@drawable/transparent_button_background"
             android:scaleType="fitCenter"
             android:src="@drawable/python"
@@ -172,50 +106,85 @@
             tools:layout_editor_absoluteY="72dp">
 
         </ImageButton>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/modern_languages_grades"
-            android:textColor="#3F5DFF"
-            android:textStyle="bold"
             android:layout_centerInParent="true"
-            android:text="Python" />
+            android:text="Python"
+            android:textColor="#3F5DFF"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/relativeLayout6"
+        android:id="@+id/relativeLayout1"
         android:layout_width="140dp"
         android:layout_height="160dp"
         android:background="@drawable/rounded_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.797"
+        app:layout_constraintHorizontal_bias="0.129"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/relativeLayout2"
-        app:layout_constraintVertical_bias="0.359">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.05">
 
         <ImageButton
-            android:id="@+id/probability_theory_grades"
+            android:id="@+id/english_grade"
+            android:layout_width="83dp"
+            android:layout_height="83dp"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/transparent_button_background"
+            android:src="@drawable/english_book" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/english_grade"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:text="Англійська мова"
+            android:textColor="#3F5DFF"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout3"
+        android:layout_width="140dp"
+        android:layout_height="160dp"
+        android:background="@drawable/rounded_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.129"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relativeLayout1"
+        app:layout_constraintVertical_bias="0.025">
+
+        <ImageButton
+            android:id="@+id/management_grades"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:layout_gravity="center_vertical"
             android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
             android:background="@drawable/transparent_button_background"
             android:scaleType="fitCenter"
-            android:src="@drawable/math"
+            android:src="@drawable/management"
             tools:layout_editor_absoluteX="234dp"
             tools:layout_editor_absoluteY="72dp">
 
         </ImageButton>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/probability_theory_grades"
-            android:textColor="#3F5DFF"
-            android:textStyle="bold"
-            android:textSize="13dp"
+            android:layout_below="@id/management_grades"
             android:layout_centerInParent="true"
-            android:text="Теорія ймовірностей" />
+            android:text="Менеджмент"
+            android:textColor="#3F5DFF"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -225,17 +194,17 @@
         android:background="@drawable/rounded_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.099"
+        app:layout_constraintHorizontal_bias="0.129"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/relativeLayout1"
-        app:layout_constraintVertical_bias="0.706">
+        app:layout_constraintTop_toBottomOf="@id/relativeLayout5"
+        app:layout_constraintVertical_bias="0.065">
 
         <ImageButton
             android:id="@+id/programming_technology_grades"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:layout_gravity="center_vertical"
             android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
             android:background="@drawable/transparent_button_background"
             android:scaleType="fitCenter"
             android:src="@drawable/technology"
@@ -243,15 +212,54 @@
             tools:layout_editor_absoluteY="72dp">
 
         </ImageButton>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/programming_technology_grades"
-            android:textColor="#3F5DFF"
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"
             android:layout_centerInParent="true"
-            android:text="Англійська мова" />
+            android:layout_marginTop="10dp"
+            android:text="Технологія програмування"
+            android:textColor="#3F5DFF"
+            android:textSize="11.2dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout6"
+        android:layout_width="140dp"
+        android:layout_height="160dp"
+        android:background="@drawable/rounded_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.878"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relativeLayout4"
+        app:layout_constraintVertical_bias="0.035">
+
+        <ImageButton
+            android:id="@+id/probability_theory_grades"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/transparent_button_background"
+            android:scaleType="fitCenter"
+            android:src="@drawable/math"
+            tools:layout_editor_absoluteX="234dp"
+            tools:layout_editor_absoluteY="72dp">
+
+        </ImageButton>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/probability_theory_grades"
+            android:layout_centerInParent="true"
+            android:text="Теорія ймовірностей"
+            android:textColor="#3F5DFF"
+            android:textSize="13dp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

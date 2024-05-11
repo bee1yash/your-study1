@@ -1,14 +1,22 @@
 package com.example.yourstudy.admin;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.widget.EditText;
+import android.widget.Toast;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,6 +42,9 @@ import com.google.firebase.storage.StorageReference;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProfileFragmentAdmin extends Fragment {
     public static class Admin {
         private String email;
@@ -55,16 +66,13 @@ public class ProfileFragmentAdmin extends Fragment {
             return photoURL;
         }
 
-
         public String getEmail() {
             return email;
         }
 
-
         public String getLastName() {
             return lastName;
         }
-
 
         public String getFirstName() {
             return firstName;
@@ -80,10 +88,21 @@ public class ProfileFragmentAdmin extends Fragment {
     TextView AdminInfoTextView;
     TextView logoutButton;
     ImageView AdminprofileImageView;
+    DatabaseReference studentsRef;
+    Spinner studentSpinner;
+    List<String> studentNames;
+    ArrayAdapter<String> spinnerAdapter;
+    ImageButton deleteStudentBtn;
+    ImageButton editGroupBtn;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_admin, container, false);
+        deleteStudentBtn = view.findViewById(R.id.delete_student_btn);
+        editGroupBtn = view.findViewById(R.id.edit_group_btn);
+        studentsRef = FirebaseDatabase.getInstance("https://your-study-a761b-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Users");
+        studentNames = new ArrayList<>();
         logoutButton = view.findViewById(R.id.logout_btn_admin);
         AdminEmailTextView = view.findViewById(R.id.admin_email);
         AdminInfoTextView = view.findViewById(R.id.admin_info);
@@ -115,9 +134,12 @@ public class ProfileFragmentAdmin extends Fragment {
             loadAdminData();
             addUserToDatabase();
         }
+        deleteStudentBtn.setOnClickListener(v -> showDeleteStudentDialog());
+        editGroupBtn.setOnClickListener(v -> showEditGroupDialog());
 
         return view;
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -151,7 +173,6 @@ public class ProfileFragmentAdmin extends Fragment {
             });
         }
     }
-
 
     @SuppressLint("SetTextI18n")
     private void addUserToDatabase() {
@@ -213,5 +234,121 @@ public class ProfileFragmentAdmin extends Fragment {
                     .addOnFailureListener(e -> {
                     });
         }
+    }
+
+    private void showDeleteStudentDialog() {
+        studentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                studentNames.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String studentName = snapshot.child("firstName").getValue(String.class) + " " +
+                            snapshot.child("lastName").getValue(String.class);
+                    studentNames.add(studentName);
+                }
+                showDeleteStudentAlertDialog();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void showDeleteStudentAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Виберіть студента, якого хочете видалити");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, studentNames);
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String selectedStudent = studentNames.get(which);
+                deleteStudent(selectedStudent);
+            }
+        });
+        builder.setNegativeButton("Відміна", null);
+        builder.create().show();
+    }
+
+    private void deleteStudent(String selectedStudent) {
+        studentsRef.orderByChild("firstName").equalTo(selectedStudent.split(" ")[0]).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    snapshot.getRef().removeValue();
+                }
+                Toast.makeText(requireContext(), "Студент " + selectedStudent + " був успішно видалений", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void showEditGroupDialog() {
+        studentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                studentNames.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String studentName = snapshot.child("firstName").getValue(String.class) + " " +
+                            snapshot.child("lastName").getValue(String.class);
+                    studentNames.add(studentName);
+                }
+                showEditGroupAlertDialog();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void showEditGroupAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Виберіть студента, чию групу ви хочете змінити");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, studentNames);
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String selectedStudent = studentNames.get(which);
+                showEditGroupInputDialog(selectedStudent);
+            }
+        });
+        builder.setNegativeButton("Відміна", null);
+        builder.create().show();
+    }
+
+    private void showEditGroupInputDialog(String selectedStudent) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Введіть новий номер групи для студента: " + selectedStudent);
+        final EditText input = new EditText(requireContext());
+        builder.setView(input);
+        builder.setPositiveButton("Зберегти", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String newGroup = input.getText().toString().trim();
+                editStudentGroup(selectedStudent, newGroup);
+            }
+        });
+        builder.setNegativeButton("Відміна", null);
+        builder.show();
+    }
+
+    private void editStudentGroup(String selectedStudent, String newGroup) {
+        studentsRef.orderByChild("firstName").equalTo(selectedStudent.split(" ")[0]).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    snapshot.getRef().child("group").setValue(newGroup);
+                }
+                Toast.makeText(requireContext(), "Групу студента " + selectedStudent + " успішно змінено на " + newGroup, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 }

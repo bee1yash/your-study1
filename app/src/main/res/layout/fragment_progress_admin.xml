@@ -9,10 +9,10 @@
         android:id="@+id/search_input"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:gravity="center"
-        android:hint="Enter email or name"
         android:layout_marginTop="32dp"
         android:background="@drawable/edittext_progress"
+        android:gravity="center"
+        android:hint="Enter email or name"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,11 +32,23 @@
         app:layout_constraintTop_toBottomOf="@+id/add_grades_button"
         app:layout_constraintVertical_bias="0.171" />
 
+    <TextView
+        android:id="@+id/average_grade_text_view2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#3F5DFF"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.472"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_grades_button" />
+
     <Spinner
         android:id="@+id/subject_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginTop="148dp"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" />
@@ -56,35 +68,78 @@
 
     <TextView
         android:id="@+id/student_info_text_view"
-        android:layout_width="411dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:textColor="#3F5DFF"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.107" />
+        app:layout_constraintVertical_bias="0.113" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Оцінка за перший модуль:"
+        android:textColor="#3F5DFF"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.085"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.368">
+
+    </TextView>
 
     <EditText
         android:id="@+id/first_module_grade_input"
-        android:layout_width="206dp"
-        android:layout_height="wrap_content"
-        android:hint="Бал за перший модуль"
+        android:layout_width="108dp"
+        android:layout_height="30dp"
+        android:gravity="center_horizontal"
+        android:background="@drawable/grade_modul"
         android:inputType="numberDecimal"
-        tools:layout_editor_absoluteX="189dp"
-        tools:layout_editor_absoluteY="328dp" />
+        app:layout_constraintBottom_toTopOf="@+id/second_module_grade_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.746"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.782" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Оцінка за другий модуль:"
+        android:textColor="#3F5DFF"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.082"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.505">
+
+    </TextView>
 
     <EditText
         android:id="@+id/second_module_grade_input"
-        android:layout_width="206dp"
-        android:layout_height="wrap_content"
-        android:hint="Бал за другий модуль"
+        android:layout_width="108dp"
+        android:layout_height="30dp"
+        android:background="@drawable/grade_modul"
+        android:gravity="center_horizontal"
         android:inputType="numberDecimal"
-        tools:layout_editor_absoluteX="189dp"
-        tools:layout_editor_absoluteY="418dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.947"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.509" />
 
     <ImageButton
         android:id="@+id/add_grades_button"

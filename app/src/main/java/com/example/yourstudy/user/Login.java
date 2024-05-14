@@ -58,68 +58,54 @@ public class Login extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
-            } else {
-                Intent intent = new Intent(getApplicationContext(), MainActivityAdmin.class);
-                startActivity(intent);
-                finish();
             }
         }
-        RegNow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Register.class);
-                startActivity(intent);
-                finish();
-            }
+        RegNow.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Register.class);
+            startActivity(intent);
+            finish();
         });
-        AdminPageLog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoginAdmin.class);
-                startActivity(intent);
-                finish();
-            }
+        AdminPageLog.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), LoginAdmin.class);
+            startActivity(intent);
+            finish();
         });
 
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                String email, password;
-                email = String.valueOf(editTextEmail.getText());
-                password = String.valueOf(editTextPassword.getText());
+        buttonLogin.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+            String email, password;
+            email = String.valueOf(editTextEmail.getText());
+            password = String.valueOf(editTextPassword.getText());
 
-                if(TextUtils.isEmpty(email)){
-                    Toast.makeText(Login.this,"Уведіть пошту", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(password)){
-                    Toast.makeText(Login.this,"Уведіть пароль", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (!email.toLowerCase().contains("student")) {
-                    Toast.makeText(Login.this, "Ви можете використовувати тільки пошту студента.", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                    return;
-                }
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(getApplicationContext(),"Вхід виконано", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                } else {
-                                    Toast.makeText(Login.this, "Не вдалось увійти.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+            if(TextUtils.isEmpty(email)){
+                Toast.makeText(Login.this,"Уведіть пошту", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                return;
             }
+            if(TextUtils.isEmpty(password)){
+                Toast.makeText(Login.this,"Уведіть пароль", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                return;
+            }
+            if (!email.toLowerCase().contains("uzhnu.edu.ua") || !email.toLowerCase().contains("student")) {
+                Toast.makeText(Login.this, "Ви можете використовувати тільки пошту студента.", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                return;
+            }
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(task -> {
+                        progressBar.setVisibility(View.GONE);
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(),"Вхід виконано", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                            FirebaseUser user = mAuth.getCurrentUser();
+                        } else {
+                            Toast.makeText(Login.this, "Не вдалось увійти.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
     }
 }

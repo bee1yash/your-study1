@@ -203,6 +203,7 @@ public class ProgressFragmentAdmin extends Fragment {
 
     private void displayUserInfo(User user) {
         if (user != null) {
+            email = user.getEmail();
             String studentInfo = user.getFirstName() + " " + user.getLastName() + "\n" + user.getEmail();
             studentInfoTextView.setText(studentInfo);
         } else {

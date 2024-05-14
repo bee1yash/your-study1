@@ -201,14 +201,14 @@ public class ProgressFragment extends Fragment {
                                 {
                                     builder.setMessage("Оцінки не виставлені");
                                 }
-                            else
-                            {
-                                String message = "Перший модуль: " + firstModuleGrade +
-                                        "\nДругий модуль: " + secondModuleGrade +
-                                        "\nПідсумковий бал: " + averageGrade;
+                                else
+                                {
+                                    String message = "Перший модуль: " + firstModuleGrade +
+                                            "\nДругий модуль: " + secondModuleGrade +
+                                            "\nПідсумковий бал: " + averageGrade;
 
-                                builder.setMessage(message);
-                            }
+                                    builder.setMessage(message);
+                                }
                             }
                         }
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -338,9 +338,9 @@ public class ProgressFragment extends Fragment {
                                 if (firstModuleGrade == null && secondModuleGrade == null && averageGrade == null) {
                                     builder.setMessage("Оцінки не виставлені");
                                 } else {
-                                    String message = "Перший модуль: " + firstModuleGrade +
-                                            "\nДругий модуль: " + secondModuleGrade +
-                                            "\nПідсумковий бал: " + averageGrade;
+                                    String message = "Перший модуль: " + (firstModuleGrade != null ? firstModuleGrade : "Оцінка не виставлена") +
+                                            "\nДругий модуль: " + (secondModuleGrade != null ? secondModuleGrade : "Оцінка не виставлена") +
+                                            "\nПідсумковий бал: " + (averageGrade != null ? averageGrade : "Оцінка не виставлена");
 
                                     builder.setMessage(message);
                                 }

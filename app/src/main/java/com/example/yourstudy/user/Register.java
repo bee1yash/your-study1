@@ -85,7 +85,7 @@ public class Register extends AppCompatActivity {
                     Toast.makeText(Register.this,"Уведіть пароль", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!email.toLowerCase().contains("student")) {
+                if (!email.toLowerCase().contains("uzhnu.edu.ua") || !email.toLowerCase().contains("student")) {
                     Toast.makeText(Register.this, "Ви можете використовувати тільки пошту студента.", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                     return;
